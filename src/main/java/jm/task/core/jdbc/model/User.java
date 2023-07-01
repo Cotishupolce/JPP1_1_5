@@ -3,30 +3,21 @@ package jm.task.core.jdbc.model;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Table
 public class User {
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", age=" + age +
-                '}';
-    }
-
     @Id
-    private Long id;
+    private static Long id;
 
     @Column
-    private String name;
+    private static String name;
 
     @Column
-    private String lastName;
+    private static String lastName;
 
     @Column
-    private Byte age;
+    private static Byte age;
 
     public User() {
 
@@ -38,7 +29,7 @@ public class User {
         this.age = age;
     }
 
-    public Long getId() {
+    public static Long getId() {
         return id;
     }
 
@@ -46,7 +37,7 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
+    public static String getName() {
         return name;
     }
 
@@ -54,7 +45,7 @@ public class User {
         this.name = name;
     }
 
-    public String getLastName() {
+    public static String getLastName() {
         return lastName;
     }
 
@@ -62,11 +53,33 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Byte getAge() {
+    public static Byte getAge() {
         return age;
     }
 
     public void setAge(Byte age) {
         this.age = age;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(lastName, user.lastName) && Objects.equals(age, user.age);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, lastName, age);
+    }
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                '}';
     }
 }
