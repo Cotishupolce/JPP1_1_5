@@ -10,12 +10,14 @@ import static jm.task.core.jdbc.util.Util.getConnection;
 
 public class UserDaoJDBCImpl implements UserDao {
     Connection connection = getConnection();
+    PreparedStatement preparedStatement = null;
+    Statement statement = null;
+
     public UserDaoJDBCImpl() {
 
     }
 
-    public void createUsersTable() throws SQLException {
-        PreparedStatement preparedStatement = null;
+    public void createUsersTable() {
         String sql = """
                 CREATE TABLE `users` (
                   `id` int NOT NULL AUTO_INCREMENT,
@@ -34,18 +36,10 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            if(preparedStatement != null){
-                preparedStatement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
         }
     }
 
-    public void dropUsersTable() throws SQLException {
-        PreparedStatement preparedStatement = null;
+    public void dropUsersTable() {
         String sql = "delete from users";
         try {
             preparedStatement = connection.prepareStatement(sql);
@@ -53,18 +47,11 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            if(preparedStatement != null){
-                preparedStatement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
         }
     }
 
-    public void saveUser(String name, String lastName, byte age) throws SQLException {
-        PreparedStatement preparedStatement = null;
+    public void saveUser(String name, String lastName, byte age) {
+
         String sql = "insert into users (name, lastName, age) value(?, ?, ?)";
         try {
             preparedStatement = connection.prepareStatement(sql);
@@ -75,18 +62,10 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            if(preparedStatement != null){
-                preparedStatement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
         }
     }
 
-    public void removeUserById(long id) throws SQLException {
-        PreparedStatement preparedStatement = null;
+    public void removeUserById(long id) {
         String sql = "delete from users where id =?";
         try {
             preparedStatement = connection.prepareStatement(sql);
@@ -94,19 +73,12 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            if(preparedStatement != null){
-                preparedStatement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
         }
     }
 
-    public List<User> getAllUsers() throws SQLException {
+    public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
-        Statement statement = null;
+
         String sql = "select * from users";
         try {
             statement = connection.createStatement();
@@ -121,19 +93,11 @@ public class UserDaoJDBCImpl implements UserDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            if(statement != null){
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
         }
         return userList;
     }
 
-    public void cleanUsersTable() throws SQLException {
-        PreparedStatement preparedStatement = null;
+    public void cleanUsersTable() {
         String sql = "truncate users";
         try {
             preparedStatement = connection.prepareStatement(sql);
@@ -141,13 +105,6 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            if(preparedStatement != null){
-                preparedStatement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
         }
     }
 }
