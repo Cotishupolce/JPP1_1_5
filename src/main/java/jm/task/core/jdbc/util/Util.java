@@ -1,33 +1,39 @@
 package jm.task.core.jdbc.util;
 
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class Util {
-    private static Connection connection = null;
+public final class Util {
+    private static final String URL = "jdbc:mysql://localhost:3306/mysqljpp1.1.4";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "cfqvjy1NhfQk44";
 
     static {
-        String url = "jdbc:mysql://localhost:3306/mysqljpp1.1.4";
-        String username = "root";
-        String password = "cfqvjy1NhfQk44";
+        loadDriver();
+    }
+
+
+    private Util() {
+
+    }
+
+    private static void loadDriver() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(url, username, password);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
     }
-    public static Connection getConnection() {
-        return connection;
+
+    public static Connection getOpen() {
+        try {
+            return DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
+

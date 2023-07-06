@@ -19,15 +19,14 @@ public class User {
     @Column
     private static Byte age;
 
-    public User() {
-
-    }
 
     public User(String name, String lastName, Byte age) {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
     }
+
+
 
     public static Long getId() {
         return id;
@@ -73,6 +72,7 @@ public class User {
     public int hashCode() {
         return Objects.hash(id, name, lastName, age);
     }
+
     @Override
     public String toString() {
         return "User{" +
