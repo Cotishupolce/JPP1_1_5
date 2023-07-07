@@ -10,8 +10,9 @@ public final class Util {
     private static final String URL = "jdbc:mysql://localhost:3306/mysqljpp1.1.4";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "cfqvjy1NhfQk44";
+    private static Connection connection = null;
     public static Connection getOpen() {
-        Connection connection = null;
+
         try {
             Class.forName(DRIVER);
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -20,6 +21,9 @@ public final class Util {
             throw new RuntimeException(e);
         }
         return connection;
+    }
+    public static void getClose() throws SQLException {
+        connection.close();
     }
 
 

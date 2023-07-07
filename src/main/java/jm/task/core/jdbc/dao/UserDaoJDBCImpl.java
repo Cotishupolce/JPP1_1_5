@@ -9,7 +9,7 @@ import java.util.List;
 
 
 public class UserDaoJDBCImpl  implements UserDao {
-    private static final UserDaoJDBCImpl INSTANCE = new UserDaoJDBCImpl();
+
     private static final String CREATE_USERS_TABDLE_SQL = """
             CREATE TABLE `user` (
               `id` int NOT NULL AUTO_INCREMENT,
@@ -29,9 +29,7 @@ public class UserDaoJDBCImpl  implements UserDao {
 
     }
 
-    public static UserDaoJDBCImpl getInstance() {
-        return INSTANCE;
-    }
+
 
     public void createUsersTable() {
 
