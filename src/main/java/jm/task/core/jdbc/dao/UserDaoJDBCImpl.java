@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class UserDaoJDBCImpl implements UserDao {
+public class UserDaoJDBCImpl  implements UserDao {
     private static final UserDaoJDBCImpl INSTANCE = new UserDaoJDBCImpl();
     private static final String CREATE_USERS_TABDLE_SQL = """
             CREATE TABLE `user` (
@@ -17,13 +17,13 @@ public class UserDaoJDBCImpl implements UserDao {
               `lastName` varchar(45) NOT NULL,
               `age` int DEFAULT NULL,
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;""";
-    private static final String DROP_USERS_TABLE_SQL = "delete from user;";
-    private static final String SAVE_USER_SQL = "insert into user (name, lastName, age) value(?, ?, ?);";
-    private static final String REMOVAE_USER_BY_ID_SQL = "delete from user where id =?;";
+            ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3""";
+    private static final String DROP_USERS_TABLE_SQL = "DROP TABLE IF EXISTS user";
+    private static final String SAVE_USER_SQL = "INSERT INTO user (name, lastName, age) VALUES (?, ?, ?)";
+    private static final String REMOVAE_USER_BY_ID_SQL = "DELETE FROM user WHERE id = ?";
 
-    private static final String GET_ALL_USERS_SQL = "select id, name, lastName, age from user;";
-    private static final String CLEAN_USERS_TABLE_SQL = "truncate user;";
+    private static final String GET_ALL_USERS_SQL = "SELECT id, name, lastName, age FROM user";
+    private static final String CLEAN_USERS_TABLE_SQL = "TRUNCATE TABLE user";
 
     public UserDaoJDBCImpl() {
 
@@ -37,13 +37,9 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (var connection = Util.getOpen();
              var preparedStatement = connection.prepareStatement(CREATE_USERS_TABDLE_SQL)) {
-            preparedStatement.setLong(1, User.getId());
-            preparedStatement.setString(2, User.getName());
-            preparedStatement.setString(3, User.getLastName());
-            preparedStatement.setByte(4, User.getAge());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -51,13 +47,9 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (var connection = Util.getOpen();
              var preparedStatement = connection.prepareStatement(DROP_USERS_TABLE_SQL)) {
-            preparedStatement.setLong(1, User.getId());
-            preparedStatement.setString(2, User.getName());
-            preparedStatement.setString(3, User.getLastName());
-            preparedStatement.setByte(4, User.getAge());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -65,13 +57,12 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (var connection = Util.getOpen();
              var preparedStatement = connection.prepareStatement(SAVE_USER_SQL)) {
-            preparedStatement.setString(1, User.getName());
-            preparedStatement.setString(2, User.getLastName());
-            preparedStatement.setByte(3, User.getAge());
-
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -82,41 +73,35 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
     public List<User> getAllUsers() {
-
+        List<User> userList = new ArrayList<>();
         try (var connection = Util.getOpen();
-             var preparedStatement = connection.prepareStatement(GET_ALL_USERS_SQL)) {
-             var resultSet = preparedStatement.executeQuery();
-            List<User> userList = new ArrayList<>();
+             var resultSet = connection.createStatement().executeQuery(GET_ALL_USERS_SQL)) {
             while (resultSet.next()) {
-                userList.add(buldUser(resultSet));
+                long id = resultSet.getLong("id");
+                String name = resultSet.getString("name");
+                String lastName = resultSet.getString("lastName");
+                byte age = resultSet.getByte("age");
+                User user = new User(id, name, lastName, age);
+                userList.add(user);
             }
-            return userList;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
-
-    }
-    private User buldUser(ResultSet resultSet) throws SQLException {
-        return new User(
-                resultSet.getString("name"),
-                resultSet.getString("lastName"),
-                resultSet.getByte("age")
-        );
+        return userList;
     }
 
     public void cleanUsersTable() {
 
         try (var connection = Util.getOpen();
              var preparedStatement = connection.prepareStatement(CLEAN_USERS_TABLE_SQL)) {
-            preparedStatement.setLong(1, User.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 }
