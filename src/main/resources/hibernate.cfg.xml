@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="connection.url">jdbc:mysql://localhost:3306/mysqljpp1.1.4=false&amp;serverTimezone=UTC</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/mysqljpp1.1.4?useSSL=false&amp;serverTimezone=UTC</property>
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="connection.username">root</property>
         <property name="connection.password">cfqvjy1NhfQk44</property>

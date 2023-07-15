@@ -10,7 +10,7 @@ import java.util.List;
 
 public class UserDaoJDBCImpl  implements UserDao {
 
-    private static final String CREATE_USERS_TABDLE_SQL = """
+    private static final String CREATE_USERS_TABLE_SQL = """
             CREATE TABLE `user` (
               `id` int NOT NULL AUTO_INCREMENT,
               `name` varchar(45) NOT NULL,
@@ -34,7 +34,7 @@ public class UserDaoJDBCImpl  implements UserDao {
     public void createUsersTable() {
 
         try (var connection = Util.getOpen();
-             var preparedStatement = connection.prepareStatement(CREATE_USERS_TABDLE_SQL)) {
+             var preparedStatement = connection.prepareStatement(CREATE_USERS_TABLE_SQL)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

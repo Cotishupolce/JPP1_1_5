@@ -5,21 +5,24 @@ import java.util.Objects;
 
 
 @Entity
-@Table
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column
+    @Column(name = "name")
     private String name;
 
-    @Column
+    @Column(name = "lastname")
     private String lastName;
 
-    @Column
+    @Column(name = "age")
     private Byte age;
 
+    public User() {
+
+    }
 
     public User(String name, String lastName, Byte age) {
 
@@ -27,7 +30,6 @@ public class User {
         this.lastName = lastName;
         this.age = age;
     }
-
 
 
     public Long getId() {
